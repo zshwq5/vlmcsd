@@ -30,6 +30,7 @@ read menu
 if [ "$menu" == "3" ]; then
 echo
 rm -f /tmp/dnsmasq_fqad.sh
+echo
 exit 0
 fi
 echo
