@@ -29,6 +29,7 @@ echo -e -n "\e[1;34m请输入数字继续执行: \e[0m"
 read menu
 if [ "$menu" == "3" ]; then
 echo
+rm -f /tmp/dnsmasq_fqad.sh
 exit 0
 fi
 echo
@@ -277,7 +278,7 @@ echo "+                                                        +"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo
 echo 
-rm -f dnsmasq_fqad.sh
+rm -f /tmp/dnsmasq_fqad.sh
 echo
 fi
 if [ "$menu" == "2" ]; then
@@ -314,6 +315,7 @@ sleep 1
 echo
 echo -e "\e[1;31m重启dnsmasq\e[0m"
 	/etc/init.d/dnsmasq restart  > /dev/null 2>&1
+	rm -f /tmp/dnsmasq_fqad.sh
 echo
 echo -e -n "\e[1;31m是否需要重启路由器？[y/n]：\e[0m" 
 read boot
@@ -323,4 +325,3 @@ read boot
 	fi
 fi
 echo
-rm -f dnsmasq_fqad.sh
