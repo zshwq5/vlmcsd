@@ -27,13 +27,6 @@ echo -e "\e[1;36m >         3. 退出 \e[0m"
 echo
 echo -e -n "\e[1;34m请输入数字继续执行: \e[0m" 
 read menu
-if [ "$menu" == "3" ]; then
-echo
-rm -f /tmp/dnsmasq_fqad.sh
-echo
-exit 0
-fi
-echo
 if [ "$menu" == "1" ]; then
 echo
 echo -e "\e[1;36m三秒后开始安装......\e[0m"
@@ -329,7 +322,7 @@ read boot
 		echo
 		reboot
 	fi
-#fi
+fi
 echo
 if [ "$menu" == "2" ]; then
 echo
@@ -377,5 +370,12 @@ read boot
 		echo
 		reboot
 	fi
+fi
+echo
+if [ "$menu" == "3" ]; then
+echo
+rm -f /tmp/dnsmasq_fqad.sh
+echo
+exit 0
 fi
 echo
