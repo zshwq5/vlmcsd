@@ -140,7 +140,6 @@ sleep 3
 #sed -i '/youtube/d' /tmp/racaljk.conf
 echo
 echo -e -n "\e[1;36m创建自定义扶墙规则\e[0m"
-mkdir -p /etc/dnsmasq.d/userlist
 echo "# 类似规则，address前加 # 失效
 # 后面的地址有两种情况,优选具体ip地址
 address=/.001union.com/127.0.0.1
