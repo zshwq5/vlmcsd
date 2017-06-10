@@ -300,6 +300,7 @@ fi
 killall dnsmasq
 /etc/init.d/dnsmasq restart
 exit 0" > /etc/dnsmasq/fqad_update.sh # 换成echo的方式注入
+sleep 1
 echo
 echo -e "\e[1;31m添加计划任务\e[0m"
 chmod 755 /etc/dnsmasq/fqad_update.sh
@@ -324,8 +325,7 @@ echo "+                                                        +"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo
 echo 
-rm -f /tmp/dnsmasq_fqad.sh
-echo
+#rm -f /tmp/dnsmasq_fqad.sh
 fi
 echo
 if [ "$menu" == "2" ]; then
