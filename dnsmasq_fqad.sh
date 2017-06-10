@@ -163,6 +163,21 @@ sed -i '/#/d' /tmp/fqad
 sed -i '/#/d' /tmp/noad
 sed -i '/@/d' /tmp/noad
 echo
+sed -i '/74.222.26.86/d' /tmp/noad
+sed -i '/74.222.26.90/d' /tmp/noad
+sed -i '/::1/d' /tmp/noad
+sed -i '/172.217.27.147/d' /tmp/noad
+sed -i '/139.162.207.229/d' /tmp/noad
+sed -i '/43.245.63.22/d' /tmp/noad
+sed -i '/172.217.25.211/d' /tmp/noad
+sed -i '/172.217.26.115/d' /tmp/noad
+sed -i '/216.58.199.243/d' /tmp/noad
+sed -i '/216.58.200.243/d' /tmp/noad
+sed -i '/5.196.172.196/d' /tmp/noad
+sed -i '/64.233.188.121/d' /tmp/noad
+sed -i '/104.27.164.22/d' /tmp/noad
+sed -i '/255.255.255.255/d' /tmp/noad
+echo
 echo -e "\e[1;36m删除dnsmasq'hosts重复规则及相关临时文件\e[0m"
 sort /tmp/fqad | uniq > /etc/dnsmasq.d/fqad.conf
 sort /tmp/noad | uniq > /etc/dnsmasq/noad.conf
@@ -227,6 +242,22 @@ sed -i '/toutiao/d' /tmp/noad
 # 删除注释
 sed -i '/#/d' /tmp/noad
 sed -i '/@/d' /tmp/noad
+echo
+sed -i '/74.222.26.86/d' /tmp/noad
+sed -i '/74.222.26.90/d' /tmp/noad
+sed -i '/::1/d' /tmp/noad
+sed -i '/172.217.27.147/d' /tmp/noad
+sed -i '/139.162.207.229/d' /tmp/noad
+sed -i '/43.245.63.22/d' /tmp/noad
+sed -i '/172.217.25.211/d' /tmp/noad
+sed -i '/172.217.26.115/d' /tmp/noad
+sed -i '/216.58.199.243/d' /tmp/noad
+sed -i '/216.58.200.243/d' /tmp/noad
+sed -i '/5.196.172.196/d' /tmp/noad
+sed -i '/64.233.188.121/d' /tmp/noad
+sed -i '/104.27.164.22/d' /tmp/noad
+sed -i '/255.255.255.255/d' /tmp/noad
+echo
 # 删除hosts重复规则
 sort /tmp/noad | uniq > /tmp/noad.conf
 # 删除hosts合并缓存
