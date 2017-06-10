@@ -192,11 +192,6 @@ echo
 echo -e "\e[1;36m创建规则更新脚本\e[0m"
 echo "#!/bin/sh
 
-LOGFILE=/tmp/fqad_update.log
-LOGSIZE=$(wc -c < $LOGFILE)
-if [ $LOGSIZE -ge 5000 ]; then
-	sed -i -e 1,10d $LOGFILE
-fi
 # 下载扶墙和广告规则
 # 下载sy618扶墙规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
@@ -296,7 +291,7 @@ sed -i '/fqad_update/d' $CRON_FILE
 echo
 echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m" 
 read timedata
-echo "28 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh > /tmp/fqad_update.log 2>&1 # 每天$timedata点28分更新dnsmasq和hosts规则" >> $CRON_FILE
+echo "28 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh 2>&1 # 每天$timedata点28分更新dnsmasq和hosts规则" >> $CRON_FILE
 # echo '' > $CRON_FILE
 /etc/init.d/cron reload
 sleep 1
