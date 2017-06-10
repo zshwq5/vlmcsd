@@ -285,11 +285,9 @@ if [ -s "/tmp/noad.conf" ];then
 	fi	
 fi
 # dnsmasq规则更新结束
-# 重启dnsmasq服务
-#killall dnsmasq
-#	/etc/init.d/dnsmasq restart  >/dev/null 2>&1
 exit 0" > /etc/dnsmasq/fqad_update.sh
 # 换成上面echo的方式注入
+sleep 1
 echo
 echo -e "\e[1;31m添加计划任务\e[0m"
 chmod 755 /etc/dnsmasq/fqad_update.sh
@@ -298,7 +296,7 @@ sed -i '/fqad_update/d' $CRON_FILE
 echo
 echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m" 
 read timedata
-echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh > /tmp/fqad_update.log 2>&1 # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
+echo "28 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh > /tmp/fqad_update.log 2>&1 # 每天$timedata点28分更新dnsmasq和hosts规则" >> $CRON_FILE
 # echo '' > $CRON_FILE
 /etc/init.d/cron reload
 sleep 1
