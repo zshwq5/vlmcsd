@@ -27,6 +27,13 @@ echo -e "\e[1;36m >         3. 退出 \e[0m"
 echo
 echo -e -n "\e[1;34m请输入数字继续执行: \e[0m" 
 read menu
+if [ "$menu" == "3" ]; then
+echo
+rm -f /tmp/dnsmasq_fqad.sh
+echo
+exit 0
+fi
+echo
 if [ "$menu" == "1" ]; then
 echo
 echo -e "\e[1;36m三秒后开始安装......\e[0m"
@@ -80,7 +87,7 @@ listen-address=$lanip,127.0.0.1 #添加监听地址（其中$lanip为你的lan�
 resolv-file=/etc/dnsmasq/resolv.conf #添加上游DNS服务器
 addn-hosts=/etc/dnsmasq/noad.conf #添加额外hosts规则路径
 bogus-priv #IP反查域名
-conf-file=/etc/dnsmasq.d/fqad.conf #添加DNS解析文件" > /etc/dnsmasq.conf
+conf-file=/etc/dnsmasq.d/fqad.conf #添加DNS解析文件" > /etc/dnsmasq.conf # 换成echo的方式注入
 echo
 sleep 3
 echo
@@ -91,7 +98,6 @@ nameserver 127.0.0.1
 # 类似ping 1.2.4.8测试速度
 # 或者用 DNSBench 软件检测
 # 依次按速度快的排序
-# 删除nameserver前的 # 生效
 nameserver 1.2.4.8
 nameserver 223.5.5.5
 nameserver 114.114.114.119
@@ -100,10 +106,15 @@ nameserver 119.29.29.29
 #nameserver 8.8.4.4
 #nameserver 182.254.116.116
 #nameserver 4.2.2.2
-#nameserver 114.114.114.114
-" >> /etc/dnsmasq/resolv.conf
+#nameserver 114.114.114.114" >> /etc/dnsmasq/resolv.conf # 换成echo的方式注入
 echo
 sleep 3
+echo
+echo -e -n "\e[1;36m创建自定义扶墙规则\e[0m"
+echo "# 类似规则,删除address前 # 生效
+# 后面的地址有两种情况,优选具体ip地址
+#address=/.001union.com/127.0.0.1
+#address=/telegram.org/149.154.167.99" > /etc/dnsmasq.d/userlist
 echo
 echo -e "\e[1;36m下载扶墙和广告规则\e[0m"
 echo
@@ -132,12 +143,6 @@ echo -e "\e[1;36m删除racaljk规则中google'youtube相关规则\e[0m"
 sed -i '/google/d' /tmp/racaljk.conf
 sed -i '/youtube/d' /tmp/racaljk.conf
 echo
-echo -e -n "\e[1;36m创建自定义扶墙规则\e[0m"
-echo "# 类似规则,删除address前 # 生效
-# 后面的地址有两种情况,优选具体ip地址
-#address=/.001union.com/127.0.0.1
-#address=/telegram.org/149.154.167.99" > /etc/dnsmasq.d/userlist
-echo
 echo -e -n "\e[1;36m合并dnsmasq'hosts缓存\e[0m" 
 cat /etc/dnsmasq.d/userlist /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf /tmp/racaljk.conf > /tmp/fqad
 cat /tmp/yhosts.conf /tmp/adaway.conf /tmp/malwaredomainlist.conf > /tmp/noad
@@ -162,21 +167,6 @@ sed -i '/#/d' /tmp/fqad
 sed -i '/#/d' /tmp/noad
 sed -i '/@/d' /tmp/noad
 echo
-sed -i '/74.222.26.86/d' /tmp/noad
-sed -i '/74.222.26.90/d' /tmp/noad
-sed -i '/::1/d' /tmp/noad
-sed -i '/172.217.27.147/d' /tmp/noad
-sed -i '/139.162.207.229/d' /tmp/noad
-sed -i '/43.245.63.22/d' /tmp/noad
-sed -i '/172.217.25.211/d' /tmp/noad
-sed -i '/172.217.26.115/d' /tmp/noad
-sed -i '/216.58.199.243/d' /tmp/noad
-sed -i '/216.58.200.243/d' /tmp/noad
-sed -i '/5.196.172.196/d' /tmp/noad
-sed -i '/64.233.188.121/d' /tmp/noad
-sed -i '/104.27.164.22/d' /tmp/noad
-sed -i '/255.255.255.255/d' /tmp/noad
-echo
 echo -e "\e[1;36m删除dnsmasq'hosts重复规则及相关临时文件\e[0m"
 sort /tmp/fqad | uniq > /etc/dnsmasq.d/fqad.conf
 sort /tmp/noad | uniq > /etc/dnsmasq/noad.conf
@@ -193,11 +183,6 @@ echo
 echo -e "\e[1;36m创建规则更新脚本\e[0m"
 echo "#!/bin/sh
 
-LOGFILE=/tmp/fqadup.log
-LOGSIZE=$(wc -c < $LOGFILE)
-if [ $LOGSIZE -ge 10000 ]; then
-	sed -i -e 1,10d $LOGFILE
-fi
 # 下载扶墙和广告规则
 # 下载sy618扶墙规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
@@ -289,22 +274,22 @@ fi
 killall dnsmasq
 /etc/init.d/dnsmasq restart
 exit 0" > /etc/dnsmasq/fqad_update.sh
-sleep 1
+# 换成上面echo的方式注入
 echo
 echo -e "\e[1;31m添加计划任务\e[0m"
 chmod 755 /etc/dnsmasq/fqad_update.sh
 echo
 sed -i '/fqad_update/d' $CRON_FILE
 echo
-echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m"
+echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m" 
 read timedata
-echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh > /tmp/fqadup.log 2>&1 # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
+echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
 # echo '' > $CRON_FILE
 /etc/init.d/cron reload
 sleep 1
 echo
 echo
-clear
+clear 
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "+                                                        +"
 echo "+                 installation is complete               +"
@@ -313,7 +298,7 @@ echo "+                     Time 2017.06.08                    +"
 echo "+                                                        +"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo
-echo
+echo 
 rm -f /tmp/dnsmasq_fqad.sh
 echo
 echo -e -n "\e[1;31m是否需要重启路由器？[y/n]：\e[0m" 
@@ -334,10 +319,6 @@ echo
 echo -e "\e[1;31m删除残留文件夹以及配置\e[0m"
 	rm -rf /etc/dnsmasq
 	rm -rf /etc/dnsmasq.d
-if [ -f /tmp/fqadup.log ]; then
-	rm -rf /tmp/fqadup.log
-fi
-echo
 if [ -f /etc/dnsmasq.bak ]; then
 	mv /etc/dnsmasq.bak /etc/dnsmasq
 fi
@@ -370,12 +351,5 @@ read boot
 		echo
 		reboot
 	fi
-fi
-echo
-if [ "$menu" == "3" ]; then
-echo
-rm -f /tmp/dnsmasq_fqad.sh
-echo
-exit 0
 fi
 echo
