@@ -75,7 +75,8 @@ fi
 echo
 echo -e -n "\e[1;36m请输入lan网关ip(类似 192.168.1.1 ): \e[0m" 
 read lanip
-echo "all-servers #并发查询所有上游DNS
+echo "cache-size=5000
+all-servers #并发查询所有上游DNS
 listen-address=$lanip,127.0.0.1 #添加监听地址（其中$lanip为你的lan网关ip）
 resolv-file=/etc/dnsmasq/resolv.conf #添加上游DNS服务器
 addn-hosts=/etc/dnsmasq/noad.conf #添加额外hosts规则路径
@@ -191,6 +192,11 @@ echo
 echo -e "\e[1;36m创建规则更新脚本\e[0m"
 echo "#!/bin/sh
 
+LOGFILE=/tmp/fqad_update.log
+LOGSIZE=$(wc -c < $LOGFILE)
+if [ $LOGSIZE -ge 5000 ]; then
+	sed -i -e 1,10d $LOGFILE
+fi
 # 下载扶墙和广告规则
 # 下载sy618扶墙规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
@@ -262,7 +268,7 @@ if [ -s "/tmp/fqad.conf" ];then
 	if ( ! cmp -s /tmp/fqad.conf /etc/dnsmasq.d/fqad.conf );then
 		mv /tmp/fqad.conf /etc/dnsmasq.d/fqad.conf
 		echo "$(date "+%F %T"):检测到fqad规则有更新......开始转换规则！"
-		#/etc/init.d/dnsmasq restart
+		/etc/init.d/dnsmasq restart >/dev/null 2>&1
 		echo "$(date "+%F %T"): fqad规则转换完成，应用新规则。"
 		else
 		echo "$(date "+%F %T"): fqad本地规则和在线规则相同，无需更新!" && rm -f /tmp/fqad.conf
@@ -272,7 +278,7 @@ if [ -s "/tmp/noad.conf" ];then
 	if ( ! cmp -s /tmp/noad.conf /etc/dnsmasq/noad.conf );then
 		mv /tmp/noad.conf /etc/dnsmasq/noad.conf
 		echo "$(date "+%F %T"): 检测到noad规则有更新......开始转换规则！"
-		#/etc/init.d/dnsmasq restart
+		/etc/init.d/dnsmasq restart >/dev/null 2>&1
 		echo "$(date "+%F %T"): noad规则转换完成，应用新规则。"
 		else
 		echo "$(date "+%F %T"): noad本地规则和在线规则相同，无需更新!" && rm -f /tmp/noad.conf
@@ -281,7 +287,7 @@ fi
 # dnsmasq规则更新结束
 # 重启dnsmasq服务
 #killall dnsmasq
-	/etc/init.d/dnsmasq restart  >/dev/null 2>&1
+#	/etc/init.d/dnsmasq restart  >/dev/null 2>&1
 exit 0" > /etc/dnsmasq/fqad_update.sh
 # 换成上面echo的方式注入
 echo
@@ -292,7 +298,7 @@ sed -i '/fqad_update/d' $CRON_FILE
 echo
 echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m" 
 read timedata
-echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh >/dev/null 2>&1 # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
+echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh > /tmp/fqad_update.log 2>&1 # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
 # echo '' > $CRON_FILE
 /etc/init.d/cron reload
 sleep 1
