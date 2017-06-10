@@ -321,15 +321,15 @@ echo "+                                                        +"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo
 echo
-	rm -f /tmp/dnsmasq_fqad.sh
+rm -f /tmp/dnsmasq_fqad.sh
 echo
-echo -e -n "\e[1;31m是否需要重启路由器？[y/n]：\e[0m"
+echo -e -n "\e[1;31m是否需要重启路由器？[y/n]：\e[0m" 
 read boot
 	if [ "$boot" = "y" ];then
 		echo
 		reboot
 	fi
-fi
+#fi
 echo
 if [ "$menu" == "2" ]; then
 echo
