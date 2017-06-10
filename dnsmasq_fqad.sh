@@ -102,11 +102,12 @@ nameserver 1.2.4.8
 nameserver 223.5.5.5
 nameserver 114.114.114.119
 nameserver 119.29.29.29
-nameserver 218.30.118.6
-nameserver 8.8.4.4
-nameserver 182.254.116.116
-nameserver 4.2.2.2
-nameserver 114.114.114.114" >> /etc/dnsmasq/resolv.conf # 换成echo的方式注入
+#nameserver 218.30.118.6
+#nameserver 8.8.4.4
+#nameserver 182.254.116.116
+#nameserver 4.2.2.2
+#nameserver 114.114.114.114
+" >> /etc/dnsmasq/resolv.conf # 换成echo的方式注入
 echo
 sleep 3
 echo
@@ -115,8 +116,8 @@ echo
 echo -e "\e[1;36m下载sy618扶墙规则\e[0m"
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
 echo
-echo -e "\e[1;36m下载racaljk规则\e[0m"
-wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
+#echo -e "\e[1;36m下载racaljk规则\e[0m"
+#wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
 echo
 echo -e "\e[1;36m下载vokins广告规则\e[0m"
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/ad.conf https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf
@@ -133,19 +134,20 @@ echo
 echo -e "\e[1;36m下载adaway规则缓存\e[0m"
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/adaway.conf http://77l5b4.com1.z0.glb.clouddn.com/hosts.txt
 sleep 3
-echo -e "\e[1;36m删除racaljk规则中google'youtube相关规则\e[0m"
-sed -i '/google/d' /tmp/racaljk.conf
-sed -i '/youtube/d' /tmp/racaljk.conf
+#echo -e "\e[1;36m删除racaljk规则中google'youtube相关规则\e[0m"
+#sed -i '/google/d' /tmp/racaljk.conf
+#sed -i '/youtube/d' /tmp/racaljk.conf
 echo
 echo -e -n "\e[1;36m合并dnsmasq'hosts缓存\e[0m" 
-cat /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
+#cat /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
+cat /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
 cat /tmp/yhosts.conf /tmp/adaway.conf /tmp/malwaredomainlist.conf > /tmp/noad
 echo
 echo -e -n "\e[1;36m删除dnsmasq'hosts临时文件\e[0m"
 rm -rf /tmp/ad.conf
 rm -rf /tmp/sy618.conf
 rm -rf /tmp/easylistchina.conf
-rm -rf /tmp/racaljk.conf
+#rm -rf /tmp/racaljk.conf
 rm -rf /tmp/yhosts.conf
 rm -rf /tmp/adaway.conf
 rm -rf /tmp/malwaredomainlist.conf
@@ -181,21 +183,22 @@ echo "#!/bin/sh
 # 下载sy618扶墙规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
 # 下载racaljk规则
-wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
+#wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
 # 下载vokins广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/ad.conf https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf
 # 下载easylistchina广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/easylistchina.conf https://c.nnjsx.cn/GL/dnsmasq/update/adblock/easylistchina.txt
 # 删除racaljk规则中google相关规则
-sed -i '/google/d' /tmp/racaljk.conf
-sed -i '/youtube/d' /tmp/racaljk.conf
+#sed -i '/google/d' /tmp/racaljk.conf
+#sed -i '/youtube/d' /tmp/racaljk.conf
 # 合并dnsmasq缓存
-cat /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
+#cat /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
+cat /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
 # 删除dnsmasq缓存
 rm -rf /tmp/ad.conf
 rm -rf /tmp/sy618.conf
 rm -rf /tmp/easylistchina.conf
-rm -rf /tmp/racaljk.conf
+#rm -rf /tmp/racaljk.conf
 # 删除所有360和头条的规则
 sed -i '/360/d' /tmp/fqad
 sed -i '/toutiao/d' /tmp/fqad
