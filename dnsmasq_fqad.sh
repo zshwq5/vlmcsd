@@ -252,7 +252,6 @@ sed -i '/toutiao/d' /tmp/noad
 # 删除注释
 sed -i '/#/d' /tmp/noad
 sed -i '/@/d' /tmp/noad
-
 sed -i '/74.222.26.86/d' /tmp/noad
 sed -i '/74.222.26.90/d' /tmp/noad
 sed -i '/::1/d' /tmp/noad
@@ -304,15 +303,15 @@ chmod 755 /etc/dnsmasq/fqad_update.sh
 echo
 sed -i '/fqad_update/d' $CRON_FILE
 echo
-echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m" 
+echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m"
 read timedata
-echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh > /tmp/fqadup.log 2>&1 # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
+echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh > /tmp/fqadup.log 2>&1 # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILEE
 # echo '' > $CRON_FILE
 /etc/init.d/cron reload
 sleep 1
 echo
 echo
-clear 
+clear
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "+                                                        +"
 echo "+                 installation is complete               +"
@@ -323,7 +322,7 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo
 echo
 rm -f /tmp/dnsmasq_fqad.shecho
-echo -e -n "\e[1;31m是否需要重启路由器？[y/n]：\e[0m" 
+echo -e -n "\e[1;31m是否需要重启路由器？[y/n]：\e[0m"
 read boot
 	if [ "$boot" = "y" ];then
 		echo
