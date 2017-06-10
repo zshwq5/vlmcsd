@@ -199,8 +199,7 @@ killall dnsmasq
 /etc/init.d/dnsmasq restart
 sleep 2
 echo
-echo -e "\e[1;36m创建规则更新脚本\e[0m"# 换成echo的方式注入
-echo
+echo -e "\e[1;36m创建规则更新脚本\e[0m"
 echo "#!/bin/sh
 
 LOGFILE=/tmp/fqadup.log
@@ -316,7 +315,7 @@ echo
 # 重启dnsmasq服务
 killall dnsmasq
 /etc/init.d/dnsmasq restart
-exit 0" > /etc/dnsmasq/fqad_update.sh
+exit 0" > /etc/dnsmasq/fqad_update.sh # 换成echo的方式注入
 echo
 echo -e "\e[1;31m添加计划任务\e[0m"
 chmod 755 /etc/dnsmasq/fqad_update.sh
