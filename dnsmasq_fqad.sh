@@ -353,6 +353,7 @@ echo
 echo -e "\e[1;31m删除残留文件夹以及配置\e[0m"
 	rm -rf /etc/dnsmasq
 	rm -rf /etc/dnsmasq.d
+	rm -rf /tmp/fqadup.log
 if [ -f /etc/dnsmasq.bak ]; then
 	mv /etc/dnsmasq.bak /etc/dnsmasq
 fi
