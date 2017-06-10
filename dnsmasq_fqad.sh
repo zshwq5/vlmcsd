@@ -185,7 +185,7 @@ sleep 3
 echo
 echo -e "\e[1;36m重启dnsmasq服务\e[0m"
 #killall dnsmasq
-	/etc/init.d/dnsmasq restart  > /dev/null 2>&1
+	/etc/init.d/dnsmasq restart  >/dev/null 2>&1
 sleep 2
 echo
 echo -e "\e[1;36m创建规则更新脚本\e[0m"
@@ -281,7 +281,7 @@ fi
 # dnsmasq规则更新结束
 # 重启dnsmasq服务
 #killall dnsmasq
-	/etc/init.d/dnsmasq restart  > /dev/null 2>&1
+	/etc/init.d/dnsmasq restart  >/dev/null 2>&1
 exit 0" > /etc/dnsmasq/fqad_update.sh
 # 换成上面echo的方式注入
 echo
@@ -292,7 +292,7 @@ sed -i '/fqad_update/d' $CRON_FILE
 echo
 echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m" 
 read timedata
-echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
+echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh >/dev/null 2>&1 # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
 # echo '' > $CRON_FILE
 /etc/init.d/cron reload
 sleep 1
@@ -351,7 +351,7 @@ sed -i '/fqad_update/d' $CRON_FILE
 sleep 1
 echo
 echo -e "\e[1;31m重启dnsmasq\e[0m"
-	/etc/init.d/dnsmasq restart  > /dev/null 2>&1
+	/etc/init.d/dnsmasq restart  >/dev/null 2>&1
 	rm -f /tmp/dnsmasq_fqad.sh
 echo
 echo -e -n "\e[1;31m是否需要重启路由器？[y/n]：\e[0m" 
