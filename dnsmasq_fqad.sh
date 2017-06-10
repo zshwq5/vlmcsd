@@ -207,23 +207,18 @@ LOGSIZE=$(wc -c < $LOGFILE)
 if [ $LOGSIZE -ge 10000 ]; then
 	sed -i -e 1,10d $LOGFILE
 fi
-echo
 # 下载扶墙和广告规则
 # 下载sy618扶墙规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
-echo
 # 下载racaljk规则 #合并后有相同地址不同IP,暂不合并
 #wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
-#echo
 # 下载vokins广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/ad.conf https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf
-echo
 # 下载easylistchina广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/easylistchina.conf https://c.nnjsx.cn/GL/dnsmasq/update/adblock/easylistchina.txt
 # 删除racaljk规则中google相关规则
 #sed -i '/google/d' /tmp/racaljk.conf
 #sed -i '/youtube/d' /tmp/racaljk.conf
-echo
 # 合并dnsmasq缓存
 #cat /etc/dnsmasq.d/userlist /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
 cat /etc/dnsmasq.d/userlist /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
@@ -232,13 +227,11 @@ rm -rf /tmp/ad.conf
 rm -rf /tmp/sy618.conf
 rm -rf /tmp/easylistchina.conf
 #rm -rf /tmp/racaljk.conf
-echo
 # 删除所有360和头条的规则
 sed -i '/360/d' /tmp/fqad
 sed -i '/toutiao/d' /tmp/fqad
 # 删除注释
 sed -i '/#/d' /tmp/fqad
-echo
 # 删除dnsmasq重复规则
 sort /tmp/fqad | uniq > /tmp/fqad.conf
 # 删除dnsmasq合并缓存
@@ -246,28 +239,23 @@ rm -rf /tmp/fqad
 # 下载hosts规则
 # 下载yhosts缓存
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/yhosts.conf https://raw.githubusercontent.com/vokins/yhosts/master/hosts.txt
-echo
 # 下载malwaredomainlist规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/malwaredomainlist.conf http://www.malwaredomainlist.com/hostslist/hosts.txt
-echo
 # 下载adaway规则缓存
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/adaway.conf http://77l5b4.com1.z0.glb.clouddn.com/hosts.txt
-echo
 # 合并hosts缓存
 cat /tmp/yhosts.conf /tmp/adaway.conf /tmp/malwaredomainlist.conf > /tmp/noad
-echo
 # 删除hosts缓存
 rm -rf /tmp/yhosts.conf
 rm -rf /tmp/adaway.conf
 rm -rf /tmp/malwaredomainlist.conf
-echo
 # 删除所有360和头条的规则
 sed -i '/360/d' /tmp/noad
 sed -i '/toutiao/d' /tmp/noad
 # 删除注释
 sed -i '/#/d' /tmp/noad
 sed -i '/@/d' /tmp/noad
-echo
+
 sed -i '/74.222.26.86/d' /tmp/noad
 sed -i '/74.222.26.90/d' /tmp/noad
 sed -i '/::1/d' /tmp/noad
@@ -282,13 +270,11 @@ sed -i '/5.196.172.196/d' /tmp/noad
 sed -i '/64.233.188.121/d' /tmp/noad
 sed -i '/104.27.164.22/d' /tmp/noad
 sed -i '/255.255.255.255/d' /tmp/noad
-echo
 # 删除hosts重复规则
 sort /tmp/noad | uniq > /tmp/noad.conf
-echo
 # 删除hosts合并缓存
 rm -rf /tmp/noad
-echo
+
 if [ -s "/tmp/fqad.conf" ];then
 	if ( ! cmp -s /tmp/fqad.conf /etc/dnsmasq.d/fqad.conf );then
 		mv /tmp/fqad.conf /etc/dnsmasq.d/fqad.conf
@@ -299,7 +285,6 @@ if [ -s "/tmp/fqad.conf" ];then
 		echo "$(date "+%F %T"): fqad本地规则和在线规则相同，无需更新!" && rm -f /tmp/fqad.conf
 	fi	
 fi
-echo
 if [ -s "/tmp/noad.conf" ];then
 	if ( ! cmp -s /tmp/noad.conf /etc/dnsmasq/noad.conf );then
 		mv /tmp/noad.conf /etc/dnsmasq/noad.conf
@@ -310,7 +295,6 @@ if [ -s "/tmp/noad.conf" ];then
 		echo "$(date "+%F %T"): noad本地规则和在线规则相同，无需更新!" && rm -f /tmp/noad.conf
 	fi	
 fi
-echo
 # dnsmasq规则更新结束
 # 重启dnsmasq服务
 killall dnsmasq
