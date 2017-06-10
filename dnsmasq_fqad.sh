@@ -203,7 +203,11 @@ echo -e "\e[1;36m创建规则更新脚本\e[0m"# 换成echo的方式注入
 echo
 echo "#!/bin/sh
 
-echo '' > /tmp/fqadup.log # 清除更新日志
+LOGFILE=/tmp/fqadup.log
+LOGSIZE=$(wc -c < $LOGFILE)
+if [ $LOGSIZE -ge 10000 ]; then
+	sed -i -e 1,10d $LOGFILE
+fi
 echo
 # 下载扶墙和广告规则
 # 下载sy618扶墙规则
