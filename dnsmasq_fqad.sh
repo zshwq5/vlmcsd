@@ -1,5 +1,5 @@
 #!/bin/sh
-## Zshwq5-2017.06.08 安装及卸载已修改"
+
 wgetroute="/usr/bin/wget-ssl";
 CRON_FILE=/etc/crontabs/root
 clear
@@ -9,7 +9,7 @@ echo "# 未经许可，请勿内置于软件内发布与传播。请勿用于产
 echo -e "## 安装前请\e[1;31m备份原配置\e[0m；由此产生的一切后果自行承担"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "+                                                        +"
-echo "+       Install Fq+Noad for OpnWrt or LEDE               +"
+echo "+ Install Fq+Noad for OpnWrt or LEDE or PandoraBox       +"
 echo "+                                                        +"
 echo "+                    Time 2017.06.08                     +"
 echo "+                                                        +"
