@@ -87,7 +87,7 @@ listen-address=$lanip,127.0.0.1 #添加监听地址（其中$lanip为你的lan�
 resolv-file=/etc/dnsmasq/resolv.conf #添加上游DNS服务器
 addn-hosts=/etc/dnsmasq/noad.conf #添加额外hosts规则路径
 bogus-priv #IP反查域名
-conf-file=/etc/dnsmasq.d/fqad.conf #添加DNS解析文件" > /etc/dnsmasq.conf # 换成echo的方式注入
+conf-file=/etc/dnsmasq.d/fqad.conf #添加DNS解析文件" > /etc/dnsmasq.conf
 echo
 sleep 3
 echo
@@ -108,7 +108,7 @@ nameserver 119.29.29.29
 #nameserver 182.254.116.116
 #nameserver 4.2.2.2
 #nameserver 114.114.114.114
-" >> /etc/dnsmasq/resolv.conf # 换成echo的方式注入
+" >> /etc/dnsmasq/resolv.conf
 echo
 sleep 3
 echo
@@ -117,8 +117,8 @@ echo
 echo -e "\e[1;36m下载sy618扶墙规则\e[0m"
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
 echo
-#echo -e "\e[1;36m下载racaljk规则\e[0m" #合并后有相同地址不同IP,暂不合并,仅影响部分扶墙地址
-#wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
+echo -e "\e[1;36m下载racaljk规则\e[0m"
+wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
 echo
 echo -e "\e[1;36m下载vokins广告规则\e[0m"
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/ad.conf https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf
@@ -135,27 +135,25 @@ echo
 echo -e "\e[1;36m下载adaway规则缓存\e[0m"
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/adaway.conf http://77l5b4.com1.z0.glb.clouddn.com/hosts.txt
 sleep 3
-#echo -e "\e[1;36m删除racaljk规则中google'youtube相关规则\e[0m"
-#sed -i '/google/d' /tmp/racaljk.conf
-#sed -i '/youtube/d' /tmp/racaljk.conf
+echo -e "\e[1;36m删除racaljk规则中google'youtube相关规则\e[0m"
+sed -i '/google/d' /tmp/racaljk.conf
+sed -i '/youtube/d' /tmp/racaljk.conf
 echo
 echo -e -n "\e[1;36m创建自定义扶墙规则\e[0m"
 echo "# 类似规则,删除address前 # 生效
 # 后面的地址有两种情况,优选具体ip地址
 #address=/.001union.com/127.0.0.1
-#address=/telegram.org/149.154.167.99
-" > /etc/dnsmasq.d/userlist
+#address=/telegram.org/149.154.167.99" > /etc/dnsmasq.d/userlist
 echo
 echo -e -n "\e[1;36m合并dnsmasq'hosts缓存\e[0m" 
-#cat /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
-cat /etc/dnsmasq.d/userlist /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
+cat /etc/dnsmasq.d/userlist /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf /tmp/racaljk.conf > /tmp/fqad
 cat /tmp/yhosts.conf /tmp/adaway.conf /tmp/malwaredomainlist.conf > /tmp/noad
 echo
 echo -e -n "\e[1;36m删除dnsmasq'hosts临时文件\e[0m"
 rm -rf /tmp/ad.conf
 rm -rf /tmp/sy618.conf
 rm -rf /tmp/easylistchina.conf
-#rm -rf /tmp/racaljk.conf
+rm -rf /tmp/racaljk.conf
 rm -rf /tmp/yhosts.conf
 rm -rf /tmp/adaway.conf
 rm -rf /tmp/malwaredomainlist.conf
@@ -211,22 +209,21 @@ fi
 # 下载sy618扶墙规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
 # 下载racaljk规则 #合并后有相同地址不同IP,暂不合并
-#wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
+wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
 # 下载vokins广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/ad.conf https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf
 # 下载easylistchina广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/easylistchina.conf https://c.nnjsx.cn/GL/dnsmasq/update/adblock/easylistchina.txt
 # 删除racaljk规则中google相关规则
-#sed -i '/google/d' /tmp/racaljk.conf
-#sed -i '/youtube/d' /tmp/racaljk.conf
+sed -i '/google/d' /tmp/racaljk.conf
+sed -i '/youtube/d' /tmp/racaljk.conf
 # 合并dnsmasq缓存
-#cat /etc/dnsmasq.d/userlist /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
-cat /etc/dnsmasq.d/userlist /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
+cat /etc/dnsmasq.d/userlist /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf /tmp/racaljk.conf > /tmp/fqad
 # 删除dnsmasq缓存
 rm -rf /tmp/ad.conf
 rm -rf /tmp/sy618.conf
 rm -rf /tmp/easylistchina.conf
-#rm -rf /tmp/racaljk.conf
+rm -rf /tmp/racaljk.conf
 # 删除所有360和头条的规则
 sed -i '/360/d' /tmp/fqad
 sed -i '/toutiao/d' /tmp/fqad
@@ -299,7 +296,7 @@ fi
 # 重启dnsmasq服务
 killall dnsmasq
 /etc/init.d/dnsmasq restart
-exit 0" > /etc/dnsmasq/fqad_update.sh # 换成echo的方式注入
+exit 0" > /etc/dnsmasq/fqad_update.sh
 sleep 1
 echo
 echo -e "\e[1;31m添加计划任务\e[0m"
@@ -324,8 +321,14 @@ echo "+                     Time 2017.06.08                    +"
 echo "+                                                        +"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo
-echo 
-#rm -f /tmp/dnsmasq_fqad.sh
+echo
+rm -f /tmp/dnsmasq_fqad.shecho
+echo -e -n "\e[1;31m是否需要重启路由器？[y/n]：\e[0m" 
+read boot
+	if [ "$boot" = "y" ];then
+		echo
+		reboot
+	fi
 fi
 echo
 if [ "$menu" == "2" ]; then
@@ -338,7 +341,10 @@ echo
 echo -e "\e[1;31m删除残留文件夹以及配置\e[0m"
 	rm -rf /etc/dnsmasq
 	rm -rf /etc/dnsmasq.d
+if [ -f /tmp/fqadup.log ]; then
 	rm -rf /tmp/fqadup.log
+fi
+echo
 if [ -f /etc/dnsmasq.bak ]; then
 	mv /etc/dnsmasq.bak /etc/dnsmasq
 fi
