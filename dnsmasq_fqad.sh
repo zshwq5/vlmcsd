@@ -197,7 +197,7 @@ echo "#!/bin/sh
 # 下载扶墙和广告规则
 # 下载sy618扶墙规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
-# 下载racaljk规则
+# 下载racaljk规则 #合并后有相同地址不同IP,暂不合并
 #wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
 # 下载vokins广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/ad.conf https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf
