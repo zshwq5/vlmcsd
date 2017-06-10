@@ -140,7 +140,7 @@ sleep 3
 #sed -i '/youtube/d' /tmp/racaljk.conf
 echo
 echo -e -n "\e[1;36m创建自定义扶墙规则\e[0m"
-echo "# 类似规则，address前加 # 失效
+echo "# 类似规则,address前加 # 失效
 # 后面的地址有两种情况,优选具体ip地址
 address=/.001union.com/127.0.0.1
 address=/telegram.org/149.154.167.99
@@ -199,8 +199,8 @@ killall dnsmasq
 /etc/init.d/dnsmasq restart
 sleep 2
 echo
-echo -e "\e[1;36m创建规则更新脚本\e[0m"
-# 换成echo的方式注入
+echo -e "\e[1;36m创建规则更新脚本\e[0m"# 换成echo的方式注入
+echo
 echo "#!/bin/sh
 
 echo ""  > /tmp/fqadup.log  #清除更新日志
