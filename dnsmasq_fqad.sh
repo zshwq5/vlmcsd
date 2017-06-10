@@ -27,13 +27,6 @@ echo -e "\e[1;36m >         3. 退出 \e[0m"
 echo
 echo -e -n "\e[1;34m请输入数字继续执行: \e[0m" 
 read menu
-if [ "$menu" == "3" ]; then
-echo
-rm -f /tmp/dnsmasq_fqad.sh
-echo
-exit 0
-fi
-echo
 if [ "$menu" == "1" ]; then
 echo
 echo -e "\e[1;36m三秒后开始安装......\e[0m"
@@ -190,8 +183,8 @@ echo
 sleep 3
 echo
 echo -e "\e[1;36m重启dnsmasq服务\e[0m"
-killall dnsmasq
-/etc/init.d/dnsmasq restart
+#killall dnsmasq
+	/etc/init.d/dnsmasq restart  > /dev/null 2>&1
 sleep 2
 echo
 echo -e "\e[1;36m创建规则更新脚本\e[0m"
@@ -285,8 +278,8 @@ if [ -s "/tmp/noad.conf" ];then
 fi
 # dnsmasq规则更新结束
 # 重启dnsmasq服务
-killall dnsmasq
-/etc/init.d/dnsmasq restart
+#killall dnsmasq
+	/etc/init.d/dnsmasq restart  > /dev/null 2>&1
 exit 0" > /etc/dnsmasq/fqad_update.sh
 # 换成上面echo的方式注入
 echo
@@ -365,5 +358,12 @@ read boot
 		echo
 		reboot
 	fi
+fi
+echo
+if [ "$menu" == "3" ]; then
+echo
+rm -f /tmp/dnsmasq_fqad.sh
+echo
+exit 0
 fi
 echo
