@@ -327,6 +327,7 @@ echo
 rm -f /tmp/dnsmasq_fqad.sh
 echo
 fi
+echo
 if [ "$menu" == "2" ]; then
 echo
 echo -e "\e[1;31m开始卸载\e[0m"
