@@ -9,7 +9,7 @@ echo "# 未经许可，请勿内置于软件内发布与传播。请勿用于产
 echo -e "## 安装前请\e[1;31m备份原配置\e[0m；由此产生的一切后果自行承担"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "+                                                        +"
-echo "+ Install Fq+Noad for OpnWrt or LEDE or PandoraBox       +"
+echo "+   Install Fq+Noad for OpnWrt or LEDE or PandoraBox     +"
 echo "+                                                        +"
 echo "+                    Time 2017.06.08                     +"
 echo "+                                                        +"
@@ -57,7 +57,7 @@ echo
 if [ -f $wgetroute ]; then
 	echo -e "\e[1;36mwget安装成功         \e[0m[\e[1;31mOK\e[0m]"
 	else
-	echo -e "\e[1;31mwget安装失败\e[0m"
+	echo -e "\e[1;31mwget安装失败,请手动安装后再试\e[0m"
 	exit
 fi
 sleep 3
@@ -98,6 +98,7 @@ nameserver 127.0.0.1
 # 类似ping 1.2.4.8测试速度
 # 或者用 DNSBench 软件检测
 # 依次按速度快的排序
+# 删除nameserver前的 # 生效
 nameserver 1.2.4.8
 nameserver 223.5.5.5
 nameserver 114.114.114.119
@@ -116,7 +117,7 @@ echo
 echo -e "\e[1;36m下载sy618扶墙规则\e[0m"
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
 echo
-#echo -e "\e[1;36m下载racaljk规则\e[0m"
+#echo -e "\e[1;36m下载racaljk规则\e[0m" #合并后有相同地址不同IP,暂不合并,仅影响部分扶墙地址
 #wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
 echo
 echo -e "\e[1;36m下载vokins广告规则\e[0m"
@@ -138,9 +139,16 @@ sleep 3
 #sed -i '/google/d' /tmp/racaljk.conf
 #sed -i '/youtube/d' /tmp/racaljk.conf
 echo
+echo -e -n "\e[1;36m创建自定义扶墙规则\e[0m"
+mkdir -p /etc/dnsmasq.d/userlist
+echo "# 类似规则，address前加 # 失效
+# 后面的地址有两种情况,优选具体ip地址
+address=/.001union.com/127.0.0.1
+address=/telegram.org/149.154.167.99
+" > /etc/dnsmasq.d/userlist
 echo -e -n "\e[1;36m合并dnsmasq'hosts缓存\e[0m" 
 #cat /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
-cat /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
+cat /etc/dnsmasq.d/userlist /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
 cat /tmp/yhosts.conf /tmp/adaway.conf /tmp/malwaredomainlist.conf > /tmp/noad
 echo
 echo -e -n "\e[1;36m删除dnsmasq'hosts临时文件\e[0m"
@@ -192,33 +200,42 @@ killall dnsmasq
 sleep 2
 echo
 echo -e "\e[1;36m创建规则更新脚本\e[0m"
+# 换成echo的方式注入
 echo "#!/bin/sh
 
+echo ""  > /tmp/fqadup.log  #清除更新日志
+echo
 # 下载扶墙和广告规则
 # 下载sy618扶墙规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
+echo
 # 下载racaljk规则 #合并后有相同地址不同IP,暂不合并
 #wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
+#echo
 # 下载vokins广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/ad.conf https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf
+echo
 # 下载easylistchina广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/easylistchina.conf https://c.nnjsx.cn/GL/dnsmasq/update/adblock/easylistchina.txt
 # 删除racaljk规则中google相关规则
 #sed -i '/google/d' /tmp/racaljk.conf
 #sed -i '/youtube/d' /tmp/racaljk.conf
+echo
 # 合并dnsmasq缓存
-#cat /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
-cat /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
+#cat /etc/dnsmasq.d/userlist /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
+cat /etc/dnsmasq.d/userlist /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
 # 删除dnsmasq缓存
 rm -rf /tmp/ad.conf
 rm -rf /tmp/sy618.conf
 rm -rf /tmp/easylistchina.conf
 #rm -rf /tmp/racaljk.conf
+echo
 # 删除所有360和头条的规则
 sed -i '/360/d' /tmp/fqad
 sed -i '/toutiao/d' /tmp/fqad
 # 删除注释
 sed -i '/#/d' /tmp/fqad
+echo
 # 删除dnsmasq重复规则
 sort /tmp/fqad | uniq > /tmp/fqad.conf
 # 删除dnsmasq合并缓存
@@ -226,16 +243,21 @@ rm -rf /tmp/fqad
 # 下载hosts规则
 # 下载yhosts缓存
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/yhosts.conf https://raw.githubusercontent.com/vokins/yhosts/master/hosts.txt
+echo
 # 下载malwaredomainlist规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/malwaredomainlist.conf http://www.malwaredomainlist.com/hostslist/hosts.txt
+echo
 # 下载adaway规则缓存
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/adaway.conf http://77l5b4.com1.z0.glb.clouddn.com/hosts.txt
+echo
 # 合并hosts缓存
 cat /tmp/yhosts.conf /tmp/adaway.conf /tmp/malwaredomainlist.conf > /tmp/noad
+echo
 # 删除hosts缓存
 rm -rf /tmp/yhosts.conf
 rm -rf /tmp/adaway.conf
 rm -rf /tmp/malwaredomainlist.conf
+echo
 # 删除所有360和头条的规则
 sed -i '/360/d' /tmp/noad
 sed -i '/toutiao/d' /tmp/noad
@@ -260,9 +282,10 @@ sed -i '/255.255.255.255/d' /tmp/noad
 echo
 # 删除hosts重复规则
 sort /tmp/noad | uniq > /tmp/noad.conf
+echo
 # 删除hosts合并缓存
 rm -rf /tmp/noad
-
+echo
 if [ -s "/tmp/fqad.conf" ];then
 	if ( ! cmp -s /tmp/fqad.conf /etc/dnsmasq.d/fqad.conf );then
 		mv /tmp/fqad.conf /etc/dnsmasq.d/fqad.conf
@@ -273,6 +296,7 @@ if [ -s "/tmp/fqad.conf" ];then
 		echo "$(date "+%F %T"): fqad本地规则和在线规则相同，无需更新!" && rm -f /tmp/fqad.conf
 	fi	
 fi
+echo
 if [ -s "/tmp/noad.conf" ];then
 	if ( ! cmp -s /tmp/noad.conf /etc/dnsmasq/noad.conf );then
 		mv /tmp/noad.conf /etc/dnsmasq/noad.conf
@@ -283,12 +307,12 @@ if [ -s "/tmp/noad.conf" ];then
 		echo "$(date "+%F %T"): noad本地规则和在线规则相同，无需更新!" && rm -f /tmp/noad.conf
 	fi	
 fi
+echo
 # dnsmasq规则更新结束
 # 重启dnsmasq服务
 killall dnsmasq
 /etc/init.d/dnsmasq restart
 exit 0" > /etc/dnsmasq/fqad_update.sh
-# 换成上面echo的方式注入
 echo
 echo -e "\e[1;31m添加计划任务\e[0m"
 chmod 755 /etc/dnsmasq/fqad_update.sh
@@ -297,7 +321,7 @@ sed -i '/fqad_update/d' $CRON_FILE
 echo
 echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m" 
 read timedata
-echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
+echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh > /tmp/fqadup.log 2>&1 # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
 # echo '' > $CRON_FILE
 /etc/init.d/cron reload
 sleep 1
