@@ -291,7 +291,7 @@ sed -i '/fqad_update/d' $CRON_FILE
 echo
 echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m" 
 read timedata
-echo "28 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh 2>&1 # 每天$timedata点28分更新dnsmasq和hosts规则" >> $CRON_FILE
+echo "28 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh >/dev/null 2>&1 # 每天$timedata点28分更新dnsmasq和hosts规则" >> $CRON_FILE
 # echo '' > $CRON_FILE
 /etc/init.d/cron reload
 sleep 1
