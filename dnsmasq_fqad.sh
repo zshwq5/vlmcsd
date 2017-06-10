@@ -140,10 +140,10 @@ sleep 3
 #sed -i '/youtube/d' /tmp/racaljk.conf
 echo
 echo -e -n "\e[1;36m创建自定义扶墙规则\e[0m"
-echo "# 类似规则,address前加 # 失效
+echo "# 类似规则,删除address前 # 生效
 # 后面的地址有两种情况,优选具体ip地址
-address=/.001union.com/127.0.0.1
-address=/telegram.org/149.154.167.99
+#address=/.001union.com/127.0.0.1
+#address=/telegram.org/149.154.167.99
 " > /etc/dnsmasq.d/userlist
 echo
 echo -e -n "\e[1;36m合并dnsmasq'hosts缓存\e[0m" 
