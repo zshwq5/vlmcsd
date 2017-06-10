@@ -208,7 +208,7 @@ fi
 # 下载扶墙和广告规则
 # 下载sy618扶墙规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/sy618.conf https://raw.githubusercontent.com/sy618/hosts/master/dnsmasq/dnsfq
-# 下载racaljk规则 #合并后有相同地址不同IP,暂不合并
+# 下载racaljk规则
 wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
 # 下载vokins广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/ad.conf https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf
@@ -305,7 +305,7 @@ sed -i '/fqad_update/d' $CRON_FILE
 echo
 echo -e -n "\e[1;36m请输入更新时间(整点小时): \e[0m"
 read timedata
-echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh > /tmp/fqadup.log 2>&1 # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILEE
+echo "30 $timedata * * * /bin/sh /etc/dnsmasq/fqad_update.sh > /tmp/fqadup.log 2>&1 # 每天$timedata点30分更新dnsmasq和hosts规则" >> $CRON_FILE
 # echo '' > $CRON_FILE
 /etc/init.d/cron reload
 sleep 1
@@ -321,7 +321,8 @@ echo "+                                                        +"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo
 echo
-rm -f /tmp/dnsmasq_fqad.shecho
+	rm -f /tmp/dnsmasq_fqad.sh
+echo
 echo -e -n "\e[1;31m是否需要重启路由器？[y/n]：\e[0m"
 read boot
 	if [ "$boot" = "y" ];then
