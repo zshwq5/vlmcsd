@@ -145,6 +145,7 @@ echo "# 类似规则，address前加 # 失效
 address=/.001union.com/127.0.0.1
 address=/telegram.org/149.154.167.99
 " > /etc/dnsmasq.d/userlist
+echo
 echo -e -n "\e[1;36m合并dnsmasq'hosts缓存\e[0m" 
 #cat /tmp/racaljk.conf /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
 cat /etc/dnsmasq.d/userlist /tmp/sy618.conf /tmp/ad.conf /tmp/easylistchina.conf > /tmp/fqad
