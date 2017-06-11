@@ -2,6 +2,7 @@
 
 wgetroute="/usr/bin/wget-ssl";
 CRON_FILE=/etc/crontabs/root
+LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")
 clear
 echo "## by sy618 zshwq5"
 echo "# 本dnsmasq'hosts规则仅供个人免费使用"
@@ -199,8 +200,10 @@ echo "#!/bin/sh
 #wget --no-check-certificate -q -O /tmp/racaljk.conf https://raw.githubusercontent.com/racaljk/hosts/master/dnsmasq.conf
 # 下载vokins广告规则
 /usr/bin/wget-ssl --no-check-certificate -q -O /tmp/ad.conf https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf
-# 下载easylistchina广告规则
-/usr/bin/wget-ssl --no-check-certificate -q -O /tmp/easylistchina.conf https://c.nnjsx.cn/GL/dnsmasq/update/adblock/easylistchina.txt
+# 下载easylistchina广告规则 #替换成easylistchina+easylist广告规则
+#/usr/bin/wget-ssl --no-check-certificate -q -O /tmp/easylistchina.conf https://c.nnjsx.cn/GL/dnsmasq/update/adblock/easylistchina.txt
+# 下载easylistchina+easylist广告规则
+/usr/bin/wget-ssl -q --no-check-certificate -O- https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/127\.0\.0\.1:' > /tmp/easylistchina.conf
 # 删除racaljk规则中google相关规则
 #sed -i '/google/d' /tmp/racaljk.conf
 #sed -i '/youtube/d' /tmp/racaljk.conf
@@ -262,21 +265,21 @@ rm -rf /tmp/noad
 if [ -s "/tmp/fqad.conf" ];then
 	if ( ! cmp -s /tmp/fqad.conf /etc/dnsmasq.d/fqad.conf );then
 		mv /tmp/fqad.conf /etc/dnsmasq.d/fqad.conf
-		echo "$(date "+%F %T"):检测到fqad规则有更新......开始转换规则！"
 		/etc/init.d/dnsmasq restart >/dev/null 2>&1
-		echo "$(date "+%F %T"): fqad规则转换完成，应用新规则。"
+		echo "['$LOGTIME'] : 检测到 fqad 规则有更新......开始转换规则！"
+		echo "['$LOGTIME'] : fqad 规则转换完成，应用新规则并重启dnsmasq。"
 		else
-		echo "$(date "+%F %T"): fqad本地规则和在线规则相同，无需更新!" && rm -f /tmp/fqad.conf
+		echo "['$LOGTIME'] : fqad 本地规则和在线规则相同，无需更新!" && rm -f /tmp/fqad.conf
 	fi	
 fi
 if [ -s "/tmp/noad.conf" ];then
 	if ( ! cmp -s /tmp/noad.conf /etc/dnsmasq/noad.conf );then
 		mv /tmp/noad.conf /etc/dnsmasq/noad.conf
-		echo "$(date "+%F %T"): 检测到noad规则有更新......开始转换规则！"
 		/etc/init.d/dnsmasq restart >/dev/null 2>&1
-		echo "$(date "+%F %T"): noad规则转换完成，应用新规则。"
+		echo "['$LOGTIME'] : 检测到 noad 规则有更新......开始转换规则！"
+		echo "['$LOGTIME'] : noad 规则转换完成，应用新规则并重启dnsmasq。"
 		else
-		echo "$(date "+%F %T"): noad本地规则和在线规则相同，无需更新!" && rm -f /tmp/noad.conf
+		echo "['$LOGTIME'] : noad 本地规则和在线规则相同，无需更新!" && rm -f /tmp/noad.conf
 	fi	
 fi
 # dnsmasq规则更新结束
