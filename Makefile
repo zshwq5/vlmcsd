@@ -29,7 +29,7 @@ define Package/vlmcsd/description
 	vlmcsd is a KMS Emulator in C.
 endef
 
-# MAKE_FLAGS += -C $(PKG_BUILD_DIR)
+## MAKE_FLAGS += -C $(PKG_BUILD_DIR)
 
 define Package/vlmcsd/conffiles
 /etc/vlmcsd.ini
