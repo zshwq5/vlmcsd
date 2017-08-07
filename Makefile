@@ -1,9 +1,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vlmcsd
-PKG_VERSION=svn1107
-PKG_RELEASE:=2016-12-12
-PKG_REV:=4cba74e69acd36c1d8ea11501da9aa65008db922
+PKG_VERSION=svn1111
+PKG_RELEASE:=2017-06-17
+PKG_REV:=7d6c2f70f9d67729d5756fe2a210012c8da0cce3
 
 PKG_MAINTAINER:=xxx <xxx@qq.com>
 PKG_LICENSE:=MIT
@@ -12,7 +12,7 @@ PKG_LICENSE_FILES:=LICENSE
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_URL:=https://github.com/zshwq5/vlmcsd-svn1107.git
+PKG_SOURCE_URL:=https://github.com/zshwq5/vlmcsd-svn1111.git
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
 include $(INCLUDE_DIR)/package.mk
